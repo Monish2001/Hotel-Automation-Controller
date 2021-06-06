@@ -32,4 +32,21 @@ public class Corridor {
         this.corridorType = corridorType;
     }
 
+    public Integer powerConsumption(Corridor corridor) {
+        Integer corriodPowerConsumption = 0;
+        for (Equipment equipment : equipments) {
+            corriodPowerConsumption += equipment.getPowerConsumption().getValue();
+        }
+        return corriodPowerConsumption;
+    }
+
+    public void changeStateOfAEquipmentInACorridor(Corridor corridor, EquipmentType equipmentType,
+            StateType stateType) {
+        Equipment equipmentObj = new Equipment();
+        for (Equipment equipment : corridor.getEquipments()) {
+            if (equipment.getType().equals(equipmentType)) {
+                equipmentObj.toggleState(equipment, stateType);
+            }
+        }
+    }
 }

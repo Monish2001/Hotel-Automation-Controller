@@ -50,18 +50,12 @@ public class Main {
             floorObj.setCorridors(corridorsList);
             floors.add(floorObj);
         }
+        Hotel hotel = new Hotel();
+        hotel.setFloors(floors);
+
+        hotel.startController();
 
     }
-
-    // private static Floor getFloor(String floorId, Corridor mainCorridor, Corridor
-    // subCorridor1, Corridor subCorridor2) {
-    // List<Corridor> corridors = new LinkedList<>();
-    // corridors.add(mainCorridor1);
-    // corridors.add(subCorridor1);
-    // corridors.add(subCorridor2);
-
-    // return new Floor(floorId, corridors);
-    // }
 
     private static List<Equipment> getEquipments(StateType state) {
         PowerConsumption lightPowerConsumption = new PowerConsumption();
@@ -69,18 +63,12 @@ public class Main {
         PowerConsumption acPowerConsumption = new PowerConsumption();
         acPowerConsumption.setValue(Constant.AC_POWER_CONSUMPTION);
 
-        // Equipment corridorLight = new Equipment(LIGHT_BULB, state,
-        // lightPowerConsumption);
-
         Equipment corridorLight = new Equipment();
         corridorLight.setType(EquipmentType.LIGHT);
         corridorLight.setState(state);
         corridorLight.setPowerConsumption(lightPowerConsumption);
 
         // AC should be in ON state for first time
-
-        // Equipment corridorAc = new Equipment(AIR_CONDITIONER, ON,
-        // acPowerConsumption);
 
         Equipment corridorAc = new Equipment();
         corridorAc.setType(EquipmentType.AIR_CONDITIONER);

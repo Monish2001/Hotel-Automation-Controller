@@ -31,4 +31,8 @@ public class Equipment {
         this.powerConsumption = powerConsumption;
     }
 
+    public void toggleState(Equipment equipment, StateType stateType) {
+        equipment.setState(stateType);
+    }
+
 }
