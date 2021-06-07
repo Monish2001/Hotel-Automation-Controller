@@ -1,7 +1,11 @@
-package classes;
+package controller;
 
 import java.util.List;
 
+import classes.Corridor;
+import classes.Equipment;
+import classes.Floor;
+import classes.Hotel;
 import constants.Constant;
 import constants.CorridorType;
 import constants.EquipmentType;
@@ -16,20 +20,25 @@ public class Controller {
         boolean input = true;
         do {
             System.out.println("******************CONTROLLER MENU******************");
+            System.out.println("Please enter any one input number: ");
             System.out.println("1.MOVEMENT \n 2.NO MOVEMENT \n 3.EXIT ");
             Integer inputMotion = Integer.parseInt(inputValueCheck.requiredIntFieldCheck());
             Hotel hotel = new Hotel();
 
             switch (inputMotion) {
                 case 1: {
+                    /* If movement occurs */
                     motionReaction(floors, true);
+                    System.out.println("\n");
                     System.out.println(Constant.EQUIPMENTS_STATE_AFTER_MOVEMENT);
                     hotel.display(floors);
                     break;
                 }
 
                 case 2: {
+                    /* If there is no movement */
                     motionReaction(floors, false);
+                    System.out.println("\n");
                     System.out.println(Constant.EQUIPMENTS_STATE_AFTER_REST);
                     hotel.display(floors);
                     break;
@@ -50,7 +59,6 @@ public class Controller {
     }
 
     public void motionReaction(List<Floor> floors, boolean condition) {
-        // boolean condition;
 
         System.out.println("Please enter the floor no: ");
 
@@ -61,12 +69,15 @@ public class Controller {
 
         Floor floorObj = new Floor();
         Corridor corridorObj = new Corridor();
+
         if (condition == true) {
             Integer maxPowerLimitOfThisFloor = 0;
             Integer totalPowerConsumedByThisFloorBeforeMotion = 0;
 
+            int floorNoMatch = 0;
             for (Floor floor : floors) {
                 if (floor.getFloorId().equals(floorNo.toString())) {
+                    floorNoMatch = 1;
                     maxPowerLimitOfThisFloor = floorObj.maxPowerLimit(floor);
                     totalPowerConsumedByThisFloorBeforeMotion = floorObj.totalPowerConsumptionOfAFloor(floor);
 
@@ -76,10 +87,17 @@ public class Controller {
                     Integer noOfSubCorridor = noOfMainAndSubCorridors.get(1);
 
                     List<Corridor> corridorList = floor.getCorridors();
+
+                    /*
+                     * If there is only one sub corridor in a given floor then turn on the light in
+                     * the given sub floor and turn off AC if the power limit exceeds
+                     */
+                    int corridorNoMatch = 0;
                     if (noOfSubCorridor == 1) {
                         for (Corridor corridor : corridorList) {
                             if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)
                                     && corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                                corridorNoMatch = 1;
                                 if (totalPowerConsumedByThisFloorBeforeMotion
                                         + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
                                     corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
@@ -95,8 +113,16 @@ public class Controller {
                                 }
                             }
                         }
+                        if (corridorNoMatch == 0) {
+                            System.out
+                                    .println("Subcorridor number didn't match!! Please enter a valid subcorridor no!!");
+                        }
                     }
-
+                    /*
+                     * If there is more than one sub corridor in a given floor then turn on the
+                     * light in the given sub floor and turn off AC in another corridor where light
+                     * is turned off already if max power limit exceeds
+                     */
                     else if (noOfSubCorridor >= 1) {
                         switchOffACInACorridorandTurnOnBulb(floor, maxPowerLimitOfThisFloor,
                                 totalPowerConsumedByThisFloorBeforeMotion, subCorridorNo);
@@ -105,15 +131,19 @@ public class Controller {
                     break;
 
                 }
-
+            }
+            if (floorNoMatch == 0) {
+                System.out.println("Floor no dindn't match!! Please enter a valid floor no!!");
             }
 
         } else if (condition == false) {
             Integer maxPowerLimitOfThisFloor = 0;
             Integer totalPowerConsumedByThisFloorAfterNoMotion = 0;
 
+            int floorNoMatch = 0;
             for (Floor floor : floors) {
                 if (floor.getFloorId().equals(floorNo.toString())) {
+                    floorNoMatch = 1;
                     maxPowerLimitOfThisFloor = floorObj.maxPowerLimit(floor);
 
                     Floor currentClassObj = new Floor();
@@ -122,10 +152,12 @@ public class Controller {
                     Integer noOfSubCorridor = noOfMainAndSubCorridors.get(1);
 
                     List<Corridor> corridorList = floor.getCorridors();
+                    int corridorNoMatch = 0;
                     if (noOfSubCorridor == 1) {
                         for (Corridor corridor : corridorList) {
                             if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)
                                     && corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                                corridorNoMatch = 1;
                                 corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
                                         StateType.OFF);
                                 totalPowerConsumedByThisFloorAfterNoMotion = floorObj
@@ -138,6 +170,10 @@ public class Controller {
                                 break;
                             }
                         }
+                        if (corridorNoMatch == 0) {
+                            System.out
+                                    .println("Subcorridor number didn't match!! Please enter a valid subcorridor no!!");
+                        }
                         break;
                     }
 
@@ -147,6 +183,10 @@ public class Controller {
                     }
 
                 }
+
+            }
+            if (floorNoMatch == 0) {
+                System.out.println("Floor no dindn't match!! Please enter a valid floor no!!");
             }
 
         }

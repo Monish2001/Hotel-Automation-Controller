@@ -2,6 +2,8 @@ package classes;
 
 import java.util.List;
 
+import controller.Controller;
+
 public class Hotel {
     private List<Floor> floors;
 
