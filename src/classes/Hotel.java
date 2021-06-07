@@ -2,6 +2,8 @@ package classes;
 
 import java.util.List;
 
+import controller.Controller;
+
 public class Hotel {
     private List<Floor> floors;
 
@@ -13,8 +15,17 @@ public class Hotel {
         this.floors = floors;
     }
 
+    /* Automated controller starts here */
     public void startController() {
         Controller controller = new Controller();
         controller.startListeningToMotion(floors);
+    }
+
+    public void display(List<Floor> floorList) {
+        Floor floorObj = new Floor();
+        for (Floor floor : floorList) {
+            floorObj.displayFloor(floor);
+            System.out.println("\n");
+        }
     }
 }
