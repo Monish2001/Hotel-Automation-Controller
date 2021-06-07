@@ -12,17 +12,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Main currentClassObj = new Main();
-        List<Floor> floors = currentClassObj.buildHotel();
+        List<Floor> floors = currentClassObj.initHotel();
 
         Hotel hotel = new Hotel();
         hotel.setFloors(floors);
         System.out.println(Constant.INITIAL_STATE_OF_ALL_EQUIPMENTS);
         hotel.display(floors);
         hotel.startController();
-
     }
 
-    public List<Floor> buildHotel() {
+    public List<Floor> initHotel() {
         InputValueCheck inputValueCheck = new InputValueCheck();
         Scanner sc = new Scanner(System.in);
 
@@ -40,7 +39,7 @@ public class Main {
 
             List<Corridor> corridorsList = new ArrayList<Corridor>();
             for (Integer mainCorridorCount = 1; mainCorridorCount <= noOfMainCorridor; mainCorridorCount++) {
-                List<Equipment> mainCorridorEquipments = getEquipments(StateType.ON);
+                List<Equipment> mainCorridorEquipments = initEquipments(StateType.ON);
                 Corridor mainCorridor = new Corridor();
                 mainCorridor.setCorridorId(mainCorridorCount.toString());
                 mainCorridor.setEquipments(mainCorridorEquipments);
@@ -49,7 +48,7 @@ public class Main {
             }
 
             for (Integer subCorridorCount = 1; subCorridorCount <= noOfSubCorridors; subCorridorCount++) {
-                List<Equipment> subCorridorEquipments = getEquipments(StateType.OFF);
+                List<Equipment> subCorridorEquipments = initEquipments(StateType.OFF);
                 Corridor subCorridor = new Corridor();
                 subCorridor.setCorridorId(subCorridorCount.toString());
                 subCorridor.setEquipments(subCorridorEquipments);
@@ -64,7 +63,7 @@ public class Main {
         return floors;
     }
 
-    public List<Equipment> getEquipments(StateType state) {
+    public List<Equipment> initEquipments(StateType state) {
         Equipment corridorLight = new Equipment();
         corridorLight.setType(EquipmentType.LIGHT);
         corridorLight.setState(state);

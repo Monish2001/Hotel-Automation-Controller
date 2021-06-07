@@ -31,6 +31,7 @@ public class Equipment {
         this.powerConsumption = powerConsumption;
     }
 
+    /* This function acts as switch as turn on and turn off */
     public void toggleState(Equipment equipment, StateType stateType) {
         equipment.setState(stateType);
     }

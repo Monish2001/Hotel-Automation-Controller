@@ -13,6 +13,7 @@ public class Hotel {
         this.floors = floors;
     }
 
+    /* Automated controller starts here */
     public void startController() {
         Controller controller = new Controller();
         controller.startListeningToMotion(floors);

@@ -72,7 +72,7 @@ public class Controller {
 
                     Floor currentClassObj = new Floor();
                     List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floor);
-                    Integer noOfMainCorridor = noOfMainAndSubCorridors.get(0);
+                    // Integer noOfMainCorridor = noOfMainAndSubCorridors.get(0);
                     Integer noOfSubCorridor = noOfMainAndSubCorridors.get(1);
 
                     List<Corridor> corridorList = floor.getCorridors();
@@ -97,7 +97,7 @@ public class Controller {
                         }
                     }
 
-                    else if (noOfSubCorridor > 1) {
+                    else if (noOfSubCorridor >= 1) {
                         switchOffACInACorridorandTurnOnBulb(floor, maxPowerLimitOfThisFloor,
                                 totalPowerConsumedByThisFloorBeforeMotion, subCorridorNo);
 
@@ -118,7 +118,7 @@ public class Controller {
 
                     Floor currentClassObj = new Floor();
                     List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floor);
-                    Integer noOfMainCorridor = noOfMainAndSubCorridors.get(0);
+                    // Integer noOfMainCorridor = noOfMainAndSubCorridors.get(0);
                     Integer noOfSubCorridor = noOfMainAndSubCorridors.get(1);
 
                     List<Corridor> corridorList = floor.getCorridors();
@@ -138,6 +138,12 @@ public class Controller {
                                 break;
                             }
                         }
+                        break;
+                    }
+
+                    else if (noOfSubCorridor > 1) {
+                        switchOfLightInACorridorAndTurnOnAc(floor, maxPowerLimitOfThisFloor, subCorridorNo);
+                        break;
                     }
 
                 }
@@ -150,7 +156,6 @@ public class Controller {
     public void switchOffACInACorridorandTurnOnBulb(Floor floor, Integer maxPowerLimitOfThisFloor,
             Integer totalPowerConsumedByThisFloorBeforeMotion, Integer subCorridorNo) {
         List<Corridor> corridorList = floor.getCorridors();
-        // List<Corridor> subCorridors =
         Corridor corridorObj = new Corridor();
         for (Corridor corridor : corridorList) {
             if (corridor.getCorridorId().equals(subCorridorNo.toString())
@@ -190,5 +195,46 @@ public class Controller {
             }
         }
         return false;
+    }
+
+    public void switchOfLightInACorridorAndTurnOnAc(Floor floor, Integer maxPowerLimitOfThisFloor,
+            Integer subCorridorNo) {
+
+        List<Corridor> corridorList = floor.getCorridors();
+        Corridor corridorObj = new Corridor();
+        Integer totalPowerConsumedByThisFloorAfterNoMotion = 0;
+        Floor floorObj = new Floor();
+        for (Corridor corridor : corridorList) {
+            if (corridor.getCorridorId().equals(subCorridorNo.toString())
+                    && corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)) {
+                corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT, StateType.OFF);
+                totalPowerConsumedByThisFloorAfterNoMotion = floorObj.totalPowerConsumptionOfAFloor(floor);
+
+                if (totalPowerConsumedByThisFloorAfterNoMotion
+                        + Constant.AC_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
+                    turnOnAcInACorridor(corridorList, subCorridorNo);
+                }
+            }
+        }
+    }
+
+    public void turnOnAcInACorridor(List<Corridor> corridorList, Integer subCorridorNo) {
+        for (Corridor corridor : corridorList) {
+            if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)
+                    && !corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                List<Equipment> equipmentList = corridor.getEquipments();
+                for (Equipment equipment : equipmentList) {
+                    if (equipment.getType().equals(EquipmentType.LIGHT) && equipment.getState().equals(StateType.OFF)) {
+                        for (Equipment equipment2 : equipmentList) {
+                            if (equipment2.getType().equals(EquipmentType.AIR_CONDITIONER)
+                                    && equipment2.getState().equals(StateType.OFF)) {
+                                equipment2.setState(StateType.ON);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
