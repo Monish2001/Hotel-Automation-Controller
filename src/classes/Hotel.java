@@ -17,4 +17,11 @@ public class Hotel {
         Controller controller = new Controller();
         controller.startListeningToMotion(floors);
     }
+
+    public void display(List<Floor> floorList) {
+        Floor floorObj = new Floor();
+        for (Floor floor : floorList) {
+            floorObj.displayFloor(floor);
+        }
+    }
 }

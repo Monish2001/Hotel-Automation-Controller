@@ -32,14 +32,6 @@ public class Floor {
         List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floorObj);
         noOfMainCorridor = noOfMainAndSubCorridors.get(0);
         noOfSubCorridor = noOfMainAndSubCorridors.get(1);
-
-        // for (Corridor corridor : floorObj.getCorridors()) {
-        // if (corridor.getCorridorType().equals(CorridorType.MAIN_CORRIDOR)) {
-        // noOfMainCorridor += 1;
-        // } else {
-        // noOfSubCorridor += 1;
-        // }
-        // }
         Integer maxPowerConsumptionLimit = (noOfMainCorridor * 15) + (noOfSubCorridor * 10);
         return maxPowerConsumptionLimit;
     }
@@ -68,5 +60,13 @@ public class Floor {
         mainAndSubCorridors.add(subCorridorCount);
         return mainAndSubCorridors;
 
+    }
+
+    public void displayFloor(Floor floorObj) {
+        Corridor corridorObj = new Corridor();
+        System.out.println("Floor no: " + floorObj.getFloorId());
+        for (Corridor corridor : floorObj.getCorridors()) {
+            corridorObj.displayCorridor(corridor);
+        }
     }
 }

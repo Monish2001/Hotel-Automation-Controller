@@ -1,4 +1,5 @@
 import constants.*;
+import controller.utils.PrintOnConsole;
 import utils.InputValueCheck;
 
 import java.util.ArrayList;
@@ -50,9 +51,13 @@ public class Main {
             floorObj.setCorridors(corridorsList);
             floors.add(floorObj);
         }
+
+        PrintOnConsole print = new PrintOnConsole();
+        System.out.println(Constant.INITIAL_STATE_OF_ALL_EQUIPMENTS);
+        print.printStateOfEquipment(floors);
+
         Hotel hotel = new Hotel();
         hotel.setFloors(floors);
-
         hotel.startController();
 
     }

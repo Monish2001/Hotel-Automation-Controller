@@ -49,4 +49,12 @@ public class Corridor {
             }
         }
     }
+
+    public void displayCorridor(Corridor corridor) {
+        Equipment equipmentObj = new Equipment();
+        System.out.println(corridor.getCorridorType() + " " + corridor.getCorridorId() + ":");
+        for (Equipment equipment : corridor.getEquipments()) {
+            equipmentObj.displayEquipment(equipment);
+        }
+    }
 }

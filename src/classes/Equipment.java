@@ -35,4 +35,8 @@ public class Equipment {
         equipment.setState(stateType);
     }
 
+    public void displayEquipment(Equipment equipment) {
+        System.out.println(equipment.getType() + " : " + equipment.getState());
+    }
+
 }
