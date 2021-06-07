@@ -5,7 +5,7 @@ import constants.*;
 public class Equipment {
     private EquipmentType type;
     private StateType state;
-    private PowerConsumption powerConsumption;
+    private Integer powerConsumption;
 
     public EquipmentType getType() {
         return this.type;
@@ -23,12 +23,21 @@ public class Equipment {
         this.state = state;
     }
 
-    public PowerConsumption getPowerConsumption() {
+    public Integer getPowerConsumption() {
         return this.powerConsumption;
     }
 
-    public void setPowerConsumption(PowerConsumption powerConsumption) {
+    public void setPowerConsumption(Integer powerConsumption) {
         this.powerConsumption = powerConsumption;
+    }
+
+    /* This function acts as switch as turn on and turn off */
+    public void toggleState(Equipment equipment, StateType stateType) {
+        equipment.setState(stateType);
+    }
+
+    public void displayEquipment(Equipment equipment) {
+        System.out.println(equipment.getType() + " : " + equipment.getState());
     }
 
 }
