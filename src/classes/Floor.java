@@ -25,6 +25,9 @@ public class Floor {
         this.corridors = corridors;
     }
 
+    /*
+     * This function is used to return the maximum power limit of a particular floor
+     */
     public Integer maxPowerLimit(Floor floorObj) {
         Integer noOfMainCorridor = 0;
         Integer noOfSubCorridor = 0;

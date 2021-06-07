@@ -32,6 +32,10 @@ public class Corridor {
         this.corridorType = corridorType;
     }
 
+    /*
+     * This function is used to calculate the power consumed for a particular
+     * corridor
+     */
     public Integer powerConsumption(Corridor corridor) {
         Integer corriodPowerConsumption = 0;
         for (Equipment equipment : corridor.getEquipments()) {
