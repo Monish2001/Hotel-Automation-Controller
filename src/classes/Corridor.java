@@ -35,7 +35,9 @@ public class Corridor {
     public Integer powerConsumption(Corridor corridor) {
         Integer corriodPowerConsumption = 0;
         for (Equipment equipment : corridor.getEquipments()) {
-            corriodPowerConsumption += equipment.getPowerConsumption();
+            if (equipment.getState().equals(StateType.ON)) {
+                corriodPowerConsumption += equipment.getPowerConsumption();
+            }
         }
         return corriodPowerConsumption;
     }

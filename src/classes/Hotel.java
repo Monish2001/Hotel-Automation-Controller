@@ -22,6 +22,7 @@ public class Hotel {
         Floor floorObj = new Floor();
         for (Floor floor : floorList) {
             floorObj.displayFloor(floor);
+            System.out.println("\n");
         }
     }
 }
