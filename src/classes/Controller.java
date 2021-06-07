@@ -13,28 +13,40 @@ public class Controller {
     InputValueCheck inputValueCheck = new InputValueCheck();
 
     public void startListeningToMotion(List<Floor> floors) {
+        boolean input = true;
         do {
-            System.out.println("Please enter 1 if motion detected else 0: ");
+            System.out.println("******************CONTROLLER MENU******************");
+            System.out.println("1.MOVEMENT \n 2.NO MOVEMENT \n 3.EXIT ");
             Integer inputMotion = Integer.parseInt(inputValueCheck.requiredIntFieldCheck());
+            Hotel hotel = new Hotel();
 
             switch (inputMotion) {
-                case 0: {
-                    motionReaction(floors, false);
+                case 1: {
+                    motionReaction(floors, true);
+                    System.out.println(Constant.EQUIPMENTS_STATE_AFTER_MOVEMENT);
+                    hotel.display(floors);
                     break;
                 }
 
-                case 1: {
-                    motionReaction(floors, true);
+                case 2: {
+                    motionReaction(floors, false);
+                    System.out.println(Constant.EQUIPMENTS_STATE_AFTER_REST);
+                    hotel.display(floors);
+                    break;
+                }
+
+                case 3: {
+                    input = false;
                     break;
                 }
 
                 default: {
                     // Do nothing for now
-                    System.out.println("Please enter a valid input");
+                    System.out.println("Please enter a valid input!!");
                     break;
                 }
             }
-        } while (true);
+        } while (input == true);
     }
 
     public void motionReaction(List<Floor> floors, boolean condition) {
@@ -56,17 +68,22 @@ public class Controller {
             for (Floor floor : floors) {
                 if (floor.getFloorId().equals(floorNo.toString())) {
                     maxPowerLimitOfThisFloor = floorObj.maxPowerLimit(floor);
+                    System.out.println("Max power limi: " + maxPowerLimitOfThisFloor);
                     totalPowerConsumedByThisFloorBeforeMotion = floorObj.totalPowerConsumptionOfAFloor(floor);
+                    System.out.println("Max power limi: " + maxPowerLimitOfThisFloor);
+                    System.out.println("total pow consumend: " + totalPowerConsumedByThisFloorBeforeMotion);
 
                     Floor currentClassObj = new Floor();
-                    List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floorObj);
+                    List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floor);
                     Integer noOfMainCorridor = noOfMainAndSubCorridors.get(0);
                     Integer noOfSubCorridor = noOfMainAndSubCorridors.get(1);
+                    System.out.println("No of main and sub cori : " + noOfMainCorridor + " " + noOfSubCorridor);
 
                     List<Corridor> corridorList = floor.getCorridors();
                     if (noOfSubCorridor == 1) {
                         for (Corridor corridor : corridorList) {
-                            if (corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                            if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)
+                                    && corridor.getCorridorId().equals(subCorridorNo.toString())) {
                                 if (totalPowerConsumedByThisFloorBeforeMotion
                                         + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
                                     corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
@@ -81,40 +98,40 @@ public class Controller {
                         }
                     }
 
-                    else if (noOfSubCorridor > 1) {
-                        for (Corridor corridor : corridorList) {
-                            if (corridor.getCorridorId().equals(subCorridorNo.toString())) {
-                                if (totalPowerConsumedByThisFloorBeforeMotion
-                                        + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
-                                    corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
-                                            StateType.ON);
-                                } else {
+                    // else if (noOfSubCorridor > 1) {
+                    // for (Corridor corridor : corridorList) {
+                    // if (corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                    // if (totalPowerConsumedByThisFloorBeforeMotion
+                    // + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
+                    // corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
+                    // StateType.ON);
+                    // } else {
 
-                                }
-                            }
-                        }
-                    }
+                    // }
+                    // }
+                    // }
+                    // }
 
-                    if (totalPowerConsumedByThisFloorBeforeMotion
-                            + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
+                    // if (totalPowerConsumedByThisFloorBeforeMotion
+                    // + Constant.LIGHT_POWER_CONSUMPTION <= maxPowerLimitOfThisFloor) {
 
-                        for (Corridor corridor : corridorList) {
-                            if (corridor.getCorridorId().equals(subCorridorNo.toString())) {
-                                corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
-                                        StateType.ON);
+                    // for (Corridor corridor : corridorList) {
+                    // if (corridor.getCorridorId().equals(subCorridorNo.toString())) {
+                    // corridorObj.changeStateOfAEquipmentInACorridor(corridor, EquipmentType.LIGHT,
+                    // StateType.ON);
 
-                            }
-                        }
-                    }
+                    // }
+                    // }
+                    // }
 
-                    else if (totalPowerConsumedByThisFloorBeforeMotion
-                            + Constant.LIGHT_POWER_CONSUMPTION > maxPowerLimitOfThisFloor) {
-                        for (Corridor corridor : corridorList) {
-                            if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)) {
+                    // else if (totalPowerConsumedByThisFloorBeforeMotion
+                    // + Constant.LIGHT_POWER_CONSUMPTION > maxPowerLimitOfThisFloor) {
+                    // for (Corridor corridor : corridorList) {
+                    // if (corridor.getCorridorType().equals(CorridorType.SUB_CORRIDOR)) {
 
-                            }
-                        }
-                    }
+                    // }
+                    // }
+                    // }
 
                     break;
 
@@ -126,6 +143,7 @@ public class Controller {
             // first turn off the light for particular corridor and then check by adding
             // power consumption to it , if it is less than or equal to maxLimit then turn
             // on ac
+
         }
 
     }
