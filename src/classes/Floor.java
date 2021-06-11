@@ -31,8 +31,7 @@ public class Floor {
     public Integer maxPowerLimit(Floor floorObj) {
         Integer noOfMainCorridor = 0;
         Integer noOfSubCorridor = 0;
-        Floor currentClassObj = new Floor();
-        List<Integer> noOfMainAndSubCorridors = currentClassObj.noOfMainAndSubCorridors(floorObj);
+        List<Integer> noOfMainAndSubCorridors = floorObj.noOfMainAndSubCorridors(floorObj);
         noOfMainCorridor = noOfMainAndSubCorridors.get(0);
         noOfSubCorridor = noOfMainAndSubCorridors.get(1);
         Integer maxPowerConsumptionLimit = (noOfMainCorridor * 15) + (noOfSubCorridor * 10);
